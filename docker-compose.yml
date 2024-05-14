@@ -28,11 +28,15 @@ services:
       - --conf=/config/lightning/conf
       - --alias=${CLN_ALIAS} 
       - --addr=0.0.0.0:9735 
+      - --announce-addr=${CLN_ANNOUNCE_ADDR} 
       - --wallet=postgres://${CLN_POSTGRES_USER}:${CLN_POSTGRES_PASSWORD}@postgres-cln:5432/${CLN_POSTGRES_DB}
       - --bitcoin-rpcuser=${BITCOIN_RPCUSER}
       - --bitcoin-rpcpassword=${BITCOIN_RPCPASSWORD}
       - --bitcoin-rpcconnect=${BITCOIN_RPCCONNECT}
       - --bitcoin-rpcport=${BITCOIN_RPCPORT}
+      - --min-capacity-sat=${CLN_MIN_CAPACITY_SAT}
+      - --fee-base=${CLN_FEE_BASE}
+      - --fee-per-satoshi=${CLN_FEE_PER_SATOSHI}
     environment:
       EXPOSE_TCP: "TRUE"
     ports:
