@@ -9,7 +9,7 @@ networks:
 services:
   postgres-cln:
     container_name: postgres-cln
-    image: postgres:14.2@sha256:2fb0a6ba2c62bb922fb83a441048ef236538354f4873d33054bbedfcbbff0550
+    image: postgres:14.12@sha256:f5e7b2f87ec217f44490f35d83cc97c1ab3748e88b641dbf87d16b8b99a46edd
     environment:
       POSTGRES_USER: ${CLN_POSTGRES_USER}
       POSTGRES_DB: ${CLN_POSTGRES_DB}
@@ -21,18 +21,6 @@ services:
     networks:
       default:
         ipv4_address: "10.21.21.98"
-  tor:
-    container_name: tor
-    image: lncm/tor:0.4.5.7@sha256:a83e0d9fd1a35adf025f2f34237ec1810e2a59765988dce1dfb222ca8ef6583c
-    user: toruser
-    restart: unless-stopped
-    volumes:
-      - ./config/tor/torrc:/etc/tor/torrc
-      - ./data/tor/lib:/var/lib/tor/
-      - ./data/tor/run:/var/run/tor/
-    networks:
-      default:
-        ipv4_address: "10.21.21.99"
   cln:
     container_name: cln
     image: elementsproject/lightningd:v24.02-amd64@sha256:0dd9aa8a59e50f5acd17de27785f1b27b3ceb05c8aa17dd8dda8d751e66728b3
