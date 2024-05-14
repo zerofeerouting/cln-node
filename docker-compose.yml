@@ -1,0 +1,57 @@
+version: "3.7"
+networks:
+  default:
+    name: zerofeerouting_network
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.21.21.0/24"
+services:
+  postgres-cln:
+    container_name: postgres-cln
+    image: postgres:14.2@sha256:2fb0a6ba2c62bb922fb83a441048ef236538354f4873d33054bbedfcbbff0550
+    environment:
+      POSTGRES_USER: ${CLN_POSTGRES_USER}
+      POSTGRES_DB: ${CLN_POSTGRES_DB}
+      POSTGRES_PASSWORD: ${CLN_POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+    volumes:
+      - ./data/cln/postgres:/var/lib/postgresql/data
+    networks:
+      default:
+        ipv4_address: "10.21.21.98"
+  tor:
+    container_name: tor
+    image: lncm/tor:0.4.5.7@sha256:a83e0d9fd1a35adf025f2f34237ec1810e2a59765988dce1dfb222ca8ef6583c
+    user: toruser
+    restart: unless-stopped
+    volumes:
+      - ./config/tor/torrc:/etc/tor/torrc
+      - ./data/tor/lib:/var/lib/tor/
+      - ./data/tor/run:/var/run/tor/
+    networks:
+      default:
+        ipv4_address: "10.21.21.99"
+  cln:
+    container_name: cln
+    build: src/ElementsProject/lightning
+    command:
+      - --conf=/config/lightning/conf
+      - --alias=${CLN_ALIAS} 
+      - --wallet=postgres://${CLN_POSTGRES_USER}:${CLN_POSTGRES_PASSWORD}@postgres-cln:5432/${CLN_POSTGRES_DB}
+    environment:
+      EXPOSE_TCP: "TRUE"
+    ports:
+      - "9735:9735"
+    restart: unless-stopped
+    volumes:
+      - ./config/cln:/config/lightning
+      - ./data/cln/lightning:/root/.lightning
+    links: 
+      - tor
+      - postgres-cln
+    networks:
+      default:
+        ipv4_address: "10.21.21.100"
+
