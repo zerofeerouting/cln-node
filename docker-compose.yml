@@ -27,7 +27,12 @@ services:
     command:
       - --conf=/config/lightning/conf
       - --alias=${CLN_ALIAS} 
+      - --addr=${CLN_ADDRESS} 
       - --wallet=postgres://${CLN_POSTGRES_USER}:${CLN_POSTGRES_PASSWORD}@postgres-cln:5432/${CLN_POSTGRES_DB}
+      - --bitcoin-rpcuser=${BITCOIN_RPCUSER}
+      - --bitcoin-rpcpassword=${BITCOIN_RPCPASSWORD}
+      - --bitcoin-rpcconnect=${BITCOIN_RPCCONNECT}
+      - --bitcoin-rpcport=${BITCOIN_RPCPORT}
     environment:
       EXPOSE_TCP: "TRUE"
     ports:
@@ -37,7 +42,6 @@ services:
       - ./config/cln:/config/lightning
       - ./data/cln/lightning:/root/.lightning
     links: 
-      - tor
       - postgres-cln
     networks:
       default:
