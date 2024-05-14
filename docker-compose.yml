@@ -27,7 +27,7 @@ services:
     command:
       - --conf=/config/lightning/conf
       - --alias=${CLN_ALIAS} 
-      - --addr=${CLN_ADDRESS} 
+      - --addr=0.0.0.0:9735 
       - --wallet=postgres://${CLN_POSTGRES_USER}:${CLN_POSTGRES_PASSWORD}@postgres-cln:5432/${CLN_POSTGRES_DB}
       - --bitcoin-rpcuser=${BITCOIN_RPCUSER}
       - --bitcoin-rpcpassword=${BITCOIN_RPCPASSWORD}
