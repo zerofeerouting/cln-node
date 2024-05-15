@@ -20,7 +20,7 @@ services:
       - ./data/cln/postgres:/var/lib/postgresql/data
     networks:
       default:
-        ipv4_address: "10.21.21.98"git
+        ipv4_address: "10.21.21.98"
   cln:
     container_name: cln
     image: elementsproject/lightningd:v24.02-amd64@sha256:0dd9aa8a59e50f5acd17de27785f1b27b3ceb05c8aa17dd8dda8d751e66728b3
