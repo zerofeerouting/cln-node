@@ -64,17 +64,13 @@ services:
       default:
         ipv4_address: "10.21.21.100"
   lightning-charge:
-    image: shesek/lightning-charge
+    image: shesek/lightning-charge:latest
     container_name: lightning-charge
     environment:
+      NETWORK: "mainnet"
       API_TOKEN: ${LIGHTNING_CHARGE_API_TOKEN}
-      CHARGE_CONFIG: |
-        {
-          "bitcoin-node": "http://${BITCOIN_RPCUSER}:${BITCOIN_RPCPASSWORD}@${BITCOIN_RPCCONNECT}:${BITCOIN_RPCPORT}",
-          "clightning-dir": "/data/lightning"
-        }
+      BITCOIND_URI: "http://${BITCOIN_RPCUSER}:${BITCOIN_RPCPASSWORD}@${BITCOIN_RPCCONNECT}:${BITCOIN_RPCPORT}"
     volumes:
-      - ./data/cln/lightning:/data/.lightning
+      - ./data/cln/lightning:/etc/lightning
     depends_on:
       - cln
-
